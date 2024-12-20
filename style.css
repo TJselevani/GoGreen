@@ -1,0 +1,353 @@
+/* Global Styles */
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Header Styles */
+.header-container {
+  background-color: #4caf50; /* White container */
+  padding: 20px; /* Padding inside the container */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a floating effect */
+  max-width: 800px; /* Width of the container */
+  margin: 20px auto; /* Center the container with space above and below */
+  box-sizing: border-box; /* Ensure padding doesn’t affect the container width */
+}
+
+.header-container h1 {
+  margin: 0 0 15px 0; /* Add space below the heading */
+  font-size: 1.8rem; /* Font size for the header */
+  color: #fff; /* Dark text color */
+  text-align: center; /* Center the title text */
+}
+
+.header-container nav {
+  display: flex;
+  justify-content: space-around; /* Space out the links evenly */
+  align-items: center; /* Align items vertically in the center */
+}
+
+.header-container nav a {
+  text-decoration: none; /* Remove underline from links */
+  color: #fff; /* Green color for links */
+  font-weight: bold; /* Bold links for better visibility */
+  padding: 8px 12px; /* Add padding to links */
+  border-radius: 4px; /* Rounded corners for links */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+.header-container nav a:hover {
+  background-color: #4caf50; /* Green background on hover */
+  color: white; /* White text on hover */
+}
+
+header {
+  text-align: center;
+  padding: 20px;
+  background-color: #4caf50;
+  color: white;
+}
+
+header h1 {
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+}
+
+header p {
+  font-size: 1.2rem;
+}
+
+/* Main Section Styles */
+main {
+  padding: 20px;
+}
+
+.intro,
+.solution,
+.user-stories,
+.navigation {
+  margin-bottom: 40px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.intro h2,
+.solution h2,
+.user-stories h2,
+.navigation h2 {
+  margin-bottom: 15px;
+  color: #4caf50;
+}
+
+.intro p,
+.solution p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* User Stories Section */
+.user-stories div {
+  margin-top: 20px;
+}
+
+.user-stories ul {
+  padding-left: 20px;
+}
+
+.user-stories li {
+  margin-bottom: 10px;
+}
+
+/* Navigation Section */
+.navigation .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-right: 10px;
+  background-color: #4caf50;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.navigation .btn:hover {
+  background-color: #45a049;
+}
+
+/* Footer Styles */
+footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 0.9rem;
+}
+
+/* Forms */
+.form-container {
+  width: 350px;
+  margin: 50px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.form-container h2 {
+  margin-bottom: 15px;
+  color: #4caf50;
+}
+
+.form-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-container input,
+.form-container select {
+  width: calc(100%); /* Fixes the padding issue */
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.form-container a {
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #4caf50;
+  font-size: 0.9rem;
+}
+
+.form-container a:hover {
+  text-decoration: underline;
+}
+
+/* Category List */
+.category-list {
+  display: flex;
+  /* flex-wrap: wrap; */
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.category {
+  flex: 1 1 calc(33% - 20px);
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.category h3 {
+  color: #4caf50;
+}
+
+.product {
+  background: white;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product h4 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.product p {
+  margin: 0 0 10px;
+}
+
+.product button {
+  width: auto;
+  padding: 10px 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-container {
+    width: 90%;
+  }
+
+  .category-list {
+    flex-direction: column;
+  }
+
+  .category {
+    flex: 1 1 100%;
+  }
+}
+
+/* Order Styles */
+
+nav a {
+  text-decoration: none;
+  color: white;
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+#user-dashboard {
+  margin: 20px auto;
+  max-width: 800px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#user-dashboard h2 {
+  font-size: 1.8rem;
+  color: #2a9d8f;
+  margin-bottom: 15px;
+}
+
+.order {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  position: relative;
+}
+
+.order h4 {
+  margin: 0 0 5px;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.order p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.cancel-button {
+  position: relative;
+  top: 15px;
+  right: 15px;
+  background-color: #e63946;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  width: 10rem;
+}
+
+.cancel-button:hover {
+  background-color: #d62839;
+}
+
+#orders-list p {
+  font-size: 1rem;
+  color: #666;
+  text-align: center;
+}
+
+/* Product styles */
+
+#grocer-dashboard {
+  display: flex;
+}
+#product-list {
+  width: 50%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+#add-product-form {
+  width: 50%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+input,
+button {
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
+}
+button {
+  background-color: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  background-color: darkgreen;
+}

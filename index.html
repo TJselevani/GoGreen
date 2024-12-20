@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GoGreen - Landing Page</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h1>Welcome to GoGreen</h1>
+      <p>Your direct link to fresh, high-quality groceries.</p>
+      <nav>
+        <a href="#index">Onboard</a>
+        <a href="#signup">Sign Up</a>
+        <a href="#signin">Sign In</a>
+        <a href="#Market">Home</a>
+        <a href="#orders">Orders</a>
+        <a href="#product">Product</a>
+        <a href="#about">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Home Section -->
+      <div id="index">
+        <section class="intro">
+          <h2>
+            Imagine a world where the aroma of freshly harvested groceries fills
+            the air...
+          </h2>
+          <p>
+            But for many grocers, this reality is hindered by a broken system,
+            one in which they rely on intermediaries. This leads to a decline in
+            product quality due to poor handling during transportation and
+            storage and inflated prices. This directly impacts the grocers'
+            livelihoods and limits consumers' access to high-quality, authentic
+            products.
+          </p>
+        </section>
+        <section class="solution">
+          <h2>Our Solution</h2>
+          <p>
+            We provide a platform that connects grocers directly with buyers and
+            offers information on the origin and quality of groceries.
+          </p>
+        </section>
+        <section class="user-stories">
+          <h2>User Stories</h2>
+          <div class="grocer">
+            <h3>For Grocers and Farmers:</h3>
+            <ul>
+              <li>Data Privacy</li>
+              <li>
+                Provide detailed information on products (origin, quality,
+                quantity, price)
+              </li>
+              <li>Communicate with buyers to confirm or reject orders</li>
+            </ul>
+          </div>
+          <div class="buyer">
+            <h3>For Buyers:</h3>
+            <ul>
+              <li>Data Privacy</li>
+              <li>Choose from a variety of quality produce</li>
+              <li>Place orders for desired produce</li>
+              <li>Provide feedback to farmers</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <!-- Sign Up Section -->
+      <div id="signup">
+        <section class="form-container">
+          <form id="signUpForm">
+            <h2>Sign Up</h2>
+            <label for="signup-username">Username:</label>
+            <input
+              type="text"
+              id="signup-username"
+              name="username"
+              placeholder="username"
+              required
+            />
+            <label for="signup-email">Email:</label>
+            <input
+              type="email"
+              id="signup-email"
+              name="email"
+              placeholder="email"
+              required
+            />
+            <label for="signup-password">Password:</label>
+            <input
+              type="password"
+              id="signup-password"
+              name="password"
+              placeholder="password"
+              required
+            />
+            <label for="signup-role">Role:</label>
+            <select id="signup-role" name="role">
+              <option value="grocer">Grocer</option>
+              <option value="buyer">Buyer</option>
+            </select>
+            <button type="submit">Sign Up</button>
+            <p>Already have an account? <a href="#signin">Sign In</a></p>
+          </form>
+        </section>
+      </div>
+
+      <!-- Sign In Section -->
+      <div id="signin">
+        <section class="form-container">
+          <form id="signInForm">
+            <h2>Sign In</h2>
+            <label for="signin-email"> Email or Username:</label>
+            <input type"text" id="signin-email" name="email-username"
+            placeholder="email/username" required />
+            <label for="signin-password">Password:</label>
+            <input
+              type="password"
+              id="signin-password"
+              name="password"
+              placeholder="password"
+              required
+            />
+            <label for="signin-role">Role:</label>
+            <select id="signin-role" name="role">
+              <option value="grocer">Grocer</option>
+              <option value="buyer">Buyer</option></select
+            ><button type="submit">Sign In</button>
+            <p>
+              Don't have an account?
+              <!-- Link to Sign Up -->
+              <a href="#signup">Sign Up</a>
+            </p>
+          </form>
+        </section>
+      </div>
+
+      <!-- Farmers Market Section -->
+      <div id="Market">
+        <section id="categories">
+          <div>
+            <h2>Categories</h2>
+            <div style="color: green" id="logout-container">
+              <div
+                id="user-info"
+                style="margin-right: auto; margin-left: 5px; text-align: left"
+              ></div>
+              <span style="margin-left: 5px" id="logout-icon" onclick="logout()"
+                >Logout</span
+              >
+            </div>
+          </div>
+
+          <div class="category-list">
+            <div class="category" onclick="filterByCategory('Fruit')">
+              <h3>Fruits</h3>
+            </div>
+            <div class="category" onclick="filterByCategory('Vegetable')">
+              <h3>Vegetables</h3>
+            </div>
+            <div class="category" onclick="filterByCategory('Honey')">
+              <h3>Honey</h3>
+            </div>
+          </div>
+          <br />
+          <br />
+          <br />
+          <h3>Products</h3>
+          <div id="product-list"></div>
+        </section>
+      </div>
+
+      <!-- Display Orders Section -->
+      <div id="orders">
+        <section id="user-dashboard">
+          <h2>Your Orders</h2>
+          <div id="orders-list"></div>
+        </section>
+      </div>
+
+      <!-- Create Product Section -->
+      <div id="product">
+        <section id="product-section">
+          <div id="grocer-dashboard">
+            <div id="product-list">
+              <h2>Your Products</h2>
+              <div id="products-display"></div>
+            </div>
+
+            <div id="add-product-form">
+              <h2>Add New Product</h2>
+              <form id="product-form">
+                <input
+                  type="text"
+                  placeholder="Product Name"
+                  id="product-name"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Farmer's Name"
+                  id="farmer-name"
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder="Farmer's Email"
+                  id="farmer-email"
+                  required
+                />
+                <input
+                  type="tel"
+                  placeholder="Farmer's Phone"
+                  id="farmer-phone"
+                  required
+                />
+                <textarea
+                  placeholder="Description"
+                  id="product-description"
+                  required
+                ></textarea>
+                <input
+                  type="text"
+                  placeholder="Farming Method (e.g., Organic)"
+                  id="farming-method"
+                  required
+                />
+                <input
+                  type="number"
+                  placeholder="Quantity"
+                  id="product-quantity"
+                  required
+                />
+                <input
+                  type="number"
+                  placeholder="Price"
+                  id="product-price"
+                  required
+                />
+                <select id="product-category" required>
+                  <option value="Fruit">Fruit</option>
+                  <option value="Vegetable">Vegetable</option>
+                  <option value="Honey">Honey</option>
+                </select>
+                <button type="submit">Add Product</button>
+              </form>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- About Section -->
+      <div id="about">
+        <section id="about-section">
+          <h2>Your Information</h2>
+          <!-- User information will be dynamically inserted here -->
+          <div id="user-info"></div>
+          <button id="edit-button">Edit Details</button>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 GoGreen. All rights reserved.</p>
+    </footer>
+    <!-- JavaScript for Navigation -->
+    <script src="script.js"></script>
+  </body>
+</html>
