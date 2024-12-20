@@ -1,0 +1,86 @@
+{
+  "users": [
+    {
+      "id": "3589",
+      "username": "farmer",
+      "email": "farmer@gmail.com",
+      "password": "farmer",
+      "role": "grocerer"
+    },
+    {
+      "id": "4b1d",
+      "username": "buyer",
+      "email": "buyer@gmail.com",
+      "password": "buyer",
+      "role": "buyer"
+    },
+    {
+      "id": "639d",
+      "username": "test",
+      "email": "tes@gmail.com",
+      "password": "wast",
+      "role": "grocerer"
+    }
+  ],
+  "grocers": [],
+  "orders": [
+    {
+      "id": "6da7",
+      "userId": "4b1d",
+      "productId": "32b0",
+      "name": "Whipped Honey",
+      "quantity": 3,
+      "price": 12
+    }
+  ],
+  "products": [
+    {
+      "id": "32b0",
+      "name": "Whipped Honey",
+      "farmerName": "Tech Farmer",
+      "farmerEmail": "farmer@gmail.com",
+      "farmerPhone": "0745627183",
+      "description": "Natural non-sweetened honey.",
+      "farmingMethod": "Organic",
+      "quantity": 15,
+      "price": 12,
+      "category": "Honey"
+    },
+    {
+      "id": "32b1",
+      "name": "Raw Honeycomb",
+      "farmerName": "Tech Farmer",
+      "farmerEmail": "farmer@gmail.com",
+      "farmerPhone": "0745627183",
+      "description": "Fresh honeycomb straight from the hive.",
+      "farmingMethod": "Organic",
+      "quantity": 10,
+      "price": 20,
+      "category": "Honey"
+    },
+    {
+      "id": "32b2",
+      "name": "Honey Infused with Ginger",
+      "farmerName": "Tech Farmer",
+      "farmerEmail": "farmer@gmail.com",
+      "farmerPhone": "0745627183",
+      "description": "Delicious honey infused with natural ginger.",
+      "farmingMethod": "Organic",
+      "quantity": 8,
+      "price": 15,
+      "category": "Honey"
+    },
+    {
+      "id": "32b3",
+      "name": "Clover Honey",
+      "farmerName": "Tech Farmer",
+      "farmerEmail": "farmer@gmail.com",
+      "farmerPhone": "0745627183",
+      "description": "Light and sweet clover honey.",
+      "farmingMethod": "Organic",
+      "quantity": 20,
+      "price": 10,
+      "category": "Honey"
+    }
+  ]
+}
