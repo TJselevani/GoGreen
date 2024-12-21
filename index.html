@@ -21,12 +21,17 @@
       <p>Your direct link to fresh, high-quality groceries.</p>
       <nav>
         <a href="#index">Onboard</a>
-        <a href="#signup">Sign Up</a>
-        <a href="#signin">Sign In</a>
-        <a href="#Market">Home</a>
-        <a href="#orders">Orders</a>
-        <a href="#product">Product</a>
-        <a href="#about">About</a>
+        <a href="#signin"> Authentication</a>
+        <a href="#signup"></a>
+        <a href="#Market" class="protected">Home</a>
+        <a href="#orders" class="protected">Orders</a>
+        <a href="#product" class="protected">Product</a>
+        <a href="#about" class="protected">About</a>
+        <span
+          id="logout-button"
+          style="display: none; cursor: pointer; color: red"
+          >Logout</span
+        >
       </nav>
     </header>
 
@@ -114,7 +119,10 @@
               <option value="buyer">Buyer</option>
             </select>
             <button type="submit">Sign Up</button>
-            <p>Already have an account? <a href="#signin">Sign In</a></p>
+            <p>
+              Already have an account?
+              <a href="#" id="toggle-to-signin">Sign In</a>
+            </p>
           </form>
         </section>
       </div>
@@ -125,8 +133,13 @@
           <form id="signInForm">
             <h2>Sign In</h2>
             <label for="signin-email"> Email or Username:</label>
-            <input type"text" id="signin-email" name="email-username"
-            placeholder="email/username" required />
+            <input
+              type="text"
+              id="signin-email"
+              name="email-username"
+              placeholder="email/username"
+              required
+            />
             <label for="signin-password">Password:</label>
             <input
               type="password"
@@ -143,7 +156,7 @@
             <p>
               Don't have an account?
               <!-- Link to Sign Up -->
-              <a href="#signup">Sign Up</a>
+              <a href="#" id="toggle-to-signup">Sign Up</a>
             </p>
           </form>
         </section>
@@ -159,20 +172,18 @@
                 id="user-info"
                 style="margin-right: auto; margin-left: 5px; text-align: left"
               ></div>
-              <span style="margin-left: 5px" id="logout-icon" onclick="logout()"
-                >Logout</span
-              >
             </div>
           </div>
+          <br />
 
           <div class="category-list">
-            <div class="category" onclick="filterByCategory('Fruit')">
+            <div class="category" id="Fruit">
               <h3>Fruits</h3>
             </div>
-            <div class="category" onclick="filterByCategory('Vegetable')">
+            <div class="category" id="Vegetable">
               <h3>Vegetables</h3>
             </div>
-            <div class="category" onclick="filterByCategory('Honey')">
+            <div class="category" id="Honey">
               <h3>Honey</h3>
             </div>
           </div>
@@ -180,7 +191,7 @@
           <br />
           <br />
           <h3>Products</h3>
-          <div id="product-list"></div>
+          <div id="market-list"></div>
         </section>
       </div>
 
@@ -268,11 +279,10 @@
         <section id="about-section">
           <h2>Your Information</h2>
           <!-- User information will be dynamically inserted here -->
-          <div id="user-info"></div>
+          <div id="user-info-about"></div> <!-- Renamed ID for uniqueness -->
           <button id="edit-button">Edit Details</button>
         </section>
       </div>
-    </main>
 
     <footer>
       <p>&copy; 2024 GoGreen. All rights reserved.</p>

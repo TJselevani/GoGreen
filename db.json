@@ -5,7 +5,7 @@
       "username": "farmer",
       "email": "farmer@gmail.com",
       "password": "farmer",
-      "role": "grocerer"
+      "role": "grocer"
     },
     {
       "id": "4b1d",
@@ -19,18 +19,25 @@
       "username": "test",
       "email": "tes@gmail.com",
       "password": "wast",
-      "role": "grocerer"
+      "role": "grocer"
+    },
+    {
+      "id": "8e69",
+      "username": "Red Grocer",
+      "email": "red@gmail.com",
+      "password": "red",
+      "role": "grocer"
     }
   ],
   "grocers": [],
   "orders": [
     {
-      "id": "6da7",
+      "id": "512f",
       "userId": "4b1d",
-      "productId": "32b0",
-      "name": "Whipped Honey",
-      "quantity": 3,
-      "price": 12
+      "productId": "32b1",
+      "name": "Raw Honeycomb",
+      "quantity": 4,
+      "price": 20
     }
   ],
   "products": [
@@ -81,6 +88,18 @@
       "quantity": 20,
       "price": 10,
       "category": "Honey"
+    },
+    {
+      "id": "1e17",
+      "name": "Pineapples",
+      "farmerName": "Tech Farmer",
+      "farmerEmail": "farmer@gmail.com",
+      "farmerPhone": "0745627183",
+      "description": "Sweet pineapples from the Bouyard county farm",
+      "farmingMethod": "Organic",
+      "quantity": "15",
+      "price": "400",
+      "category": "Fruit"
     }
   ]
 }

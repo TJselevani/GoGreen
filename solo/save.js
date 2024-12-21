@@ -4,9 +4,31 @@ document.addEventListener("DOMContentLoaded", () => {
   // JavaScript functionality to display sections(pages)
   const sections = document.querySelectorAll("main > div");
   const navLinks = document.querySelectorAll("nav a");
-  const protectedLinks = document.querySelectorAll(".protected");
 
-  // Function to update navigation based on authentication status
+  navLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      // Get the target section ID
+      const targetId = this.getAttribute("href").substring(1);
+      const targetSection = document.getElementById(targetId);
+
+      // Hide all sections
+      sections.forEach((section) => {
+        section.style.display = "none";
+      });
+
+      // Show the target section
+      if (targetSection) {
+        targetSection.style.display = "block";
+      }
+
+      // Optionally, set an active class for styling
+      navLinks.forEach((l) => l.classList.remove("active"));
+      this.classList.add("active");
+    });
+  });
+
+  // Update navigation based on authentication status ##################
   function updateNavigation() {
     protectedLinks.forEach((link) => {
       link.style.display = currentUser ? "inline" : "none";
@@ -19,125 +41,114 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector('nav a[href="#signin"]').style.display = currentUser
       ? "none"
       : "inline";
-    document.querySelector('nav a[href="#index"]').style.display = currentUser
-      ? "none"
-      : "inline";
-
-    // Show or hide product section based on role
-    document.querySelector('nav a[href="#product"]').style.display =
-      currentUser?.role === "grocer" ? "inline" : "none";
-
-    // Show or hide Logout button
-    document.getElementById("logout-button").style.display = currentUser
-      ? "inline"
-      : "none";
   }
 
   // Function to show specific sections
   function showSection(sectionId) {
+    const sections = document.querySelectorAll("main > div");
     sections.forEach((section) => {
       section.style.display = section.id === sectionId ? "block" : "none";
     });
   }
 
-  // Initialize navigation visibility
+  // Initial setup: hide protected links until logged in
   updateNavigation();
 
-  // Navigation click event
-  navLinks.forEach((link) => {
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      const targetId = this.getAttribute("href").substring(1);
-
-      // Show the selected section
-      showSection(targetId);
-
-      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-      // If the Market section is selected, fetch and display products
-      if (targetId === "Market") {
-        fetchProducts(); // Fetch products when navigating to Market
+  // ######################## Highlight Current Section ##################
+  function highlightCurrentPage() {
+    const links = document.querySelectorAll("nav a");
+    links.forEach((link) => {
+      if (link.href.includes(window.location.pathname)) {
+        link.style.color = "green";
       }
-
-      if (targetId === "orders") {
-        if (loggedInUser.role === "buyer") {
-          fetchBuyerOrders();
-        } else {
-          fetchFarmersOrders();
-        }
-      }
-
-      if (targetId === "product") {
-        fetchGrocerProductListings();
-      }
-
-      if (targetId === "About") {
-        displayUserData(loggedInUser || currentUser);
-        displayEditableForm(loggedInUser);
-      }
-
-      navLinks.forEach((l) => l.classList.remove("active"));
-      this.classList.add("active");
     });
-  });
+  }
 
-  // Check for user login status on page load
+  // ################## Check if user is saved to local storage ############
   function checkUserLogin() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (loggedInUser) {
-      currentUser = loggedInUser;
-      updateNavigationLinks(loggedInUser.role);
-      displayUserInfo(loggedInUser);
-      updateNavigation();
-      showSection("Market"); // Show home section if logged in
-
-      // Show or hide the product section based on user role
-      document.getElementById("product").style.display =
-        currentUser.role === "grocer" ? "block" : "none";
-    } else {
-      showSection("index"); // Show onboard section if not logged in
-      document.getElementById("product").style.display = "none"; // Ensure product section is hidden
+    if (!loggedInUser) {
+      window.location.href = "../index.html";
+      return;
     }
+    displayUserInfo(loggedInUser);
   }
 
-  // Function to update navigation links based on user role
-  function updateNavigationLinks(role) {
-    const productLink = document.querySelector("nav a[href='#product']");
-    const aboutLink = document.querySelector("nav a[href='#about']");
-
-    // Hide Product link for Buyers
-    if (role === "buyer") {
-      productLink.style.display = "none"; // Hide Product link
-      aboutLink.textContent = "Hello Buyer"; // Change About to Hello Buyer
-    } else if (role === "grocer") {
-      productLink.style.display = "inline"; // Show Product link
-      aboutLink.textContent = "Hello Farmer"; // Change About to Hello Farmer
-    }
-
-    // Show Logout button
-    document.getElementById("logout-button").style.display = "inline";
-  }
-
+  // ################## Display user info #########################
   function displayUserInfo(user) {
     const userInfoDiv = document.getElementById("user-info");
     userInfoDiv.innerHTML = `<p><strong>${user.username}</strong></p><p>${user.email}</p>`;
+
+    if (user.role === "grocer") {
+      addGrocerLink();
+    } else if (user.role === "buyer") {
+      addBuyerLink();
+    }
   }
 
-  // ************************************************************************************************************************************************ //
-  // ******************************************** Authentication Section **************************************************************************** //
-  // ************************************************************************************************************************************************ //
+  // #################### Display user Data ##########################
+  function displayUserData(user) {
+    const userInfoDiv = document.getElementById("user-info");
+    userInfoDiv.innerHTML = ""; // Clear any existing user info
 
-  // User Sign Up Handler
+    // Create a list to display key-value pairs of user data
+    const userList = document.createElement("ul");
+
+    for (const key in user) {
+      if (user.hasOwnProperty(key)) {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${key}: ${user[key]}`;
+        userList.appendChild(listItem);
+      }
+    }
+
+    // Append the user data list to the container
+    userInfoDiv.appendChild(userList);
+
+    // If the user is a grocer, display additional information
+    if (user.role === "grocer") {
+      const grocerInfo = document.createElement("p");
+      grocerInfo.textContent =
+        "You are a Grocer! You can manage products and orders.";
+      userInfoDiv.appendChild(grocerInfo);
+    }
+  }
+
+  // ################### display Grocer authorized routes ###################
+  function addGrocerLink() {
+    const contactLink = document.querySelector("nav a[href='./about.html']");
+    const helloFarmerLink = document.createElement("a");
+    helloFarmerLink.href = "./grocer-page.html";
+    helloFarmerLink.textContent = "Hello Farmer";
+    helloFarmerLink.style.color = "white";
+    contactLink.parentNode.insertBefore(helloFarmerLink, contactLink);
+  }
+
+  // ################### display Buyer authorized routes #######################
+  function addBuyerLink() {
+    const contactLink = document.querySelector("nav a[href='./about.html']");
+    const helloFarmerLink = document.createElement("a");
+    helloFarmerLink.href = "./grocer-page.html";
+    helloFarmerLink.textContent = "Hello Farmer";
+    helloFarmerLink.style.color = "white";
+    contactLink.parentNode.insertBefore(helloFarmerLink, contactLink);
+  }
+
+  // ##################  Authentication Logic  ##################################
+  const signInForm = document.getElementById("signInForm");
   const signUpForm = document.getElementById("signUpForm");
+
+  // User Sign Up Handler ##################################3
   signUpForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const newUsername = this.username.value.trim();
-    const newEmail = this.email.value.trim();
-    const newPassword = this.password.value.trim();
-    const newRole = this.role.trim();
+    const newUsername = document.getElementById("signup-username").value.trim();
+    const newEmail = document.getElementById("signup-email").value.trim();
+    const newPassword = document.getElementById("signup-password").value.trim();
+    const newRole = document.getElementById("signup-role").value.trim();
 
     try {
+      // Create new user
       const response = await fetch("http://localhost:3000/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -149,61 +160,62 @@ document.addEventListener("DOMContentLoaded", () => {
         }),
       });
 
+      // contains the user data (the created user)
       const createdUser = await response.json();
-      currentUser = null;
       currentUser = createdUser;
+
+      // Save user info to localStorage for session management
       localStorage.setItem("loggedInUser", JSON.stringify(createdUser));
 
       alert("Registration successful!");
 
-      // Show or hide product section based on role
-      // document.getElementById("product").style.display =
-      //   currentUser.role === "grocer" ? "block" : "none";
-
-      showSection("Market"); // Navigate to Home
+      // Redirect user to the home page
+      // window.location.href = "#home.html";
+      // Navigate to Home
+      showSection("Market");
       updateNavigation();
 
-      signUpForm.reset(); // Reset the form after submission
+      // Reset the form
+      // signUpForm.reset();
     } catch (error) {
       console.error("Error during sign-up:", error);
       alert("An error occurred. Please try again later.");
     }
   });
 
-  // User Sign In Handler
-  const signInForm = document.getElementById("signInForm");
+  // User Sign in Handler #######################################
   signInForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const emailOrUsername = this["email-username"].value.trim();
-    const password = this.password.value.trim();
+    const email = document.getElementById("signin-email").value.trim();
+    const password = document.getElementById("signin-password").value.trim();
+    const role = document.getElementById("signin-role").value.trim();
 
     try {
       const response = await fetch("http://localhost:3000/users");
-      if (!response.ok) throw new Error("Failed to fetch users.");
+      if (!response.ok) {
+        throw new Error("Failed to fetch users. Please try again later.");
+      }
 
       const users = await response.json();
 
       const user = users.find(
         (u) =>
-          (u.email === emailOrUsername || u.username === emailOrUsername) &&
-          u.password === password
+          (u.email === email && u.password === password && u.role === role) ||
+          (u.username === email && u.password === password && u.role === role)
       );
 
       if (user) {
         alert("Login successful!");
-        currentUser = null;
-        currentUser = user;
+
+        // Save user info to localStorage for session management
         localStorage.setItem("loggedInUser", JSON.stringify(user));
 
-        // Show or hide product section based on role
-        // document.getElementById("product").style.display =
-        //   currentUser.role === "grocer" ? "block" : "none";
-
-        showSection("Market"); // Navigate to Home
+        // Navigate to Home
+        showSection("Market");
         updateNavigation();
-
-        signInForm.reset(); // Reset the form after submission
+        // Redirect user to the home page
+        // window.location.href = "#home.html";
       } else {
         alert("Invalid credentials!");
       }
@@ -213,51 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Toggle between Sign In and Sign Up forms
-  const toggleToSignUpLink = document.getElementById("toggle-to-signup");
-
-  toggleToSignUpLink.addEventListener("click", function (e) {
-    e.preventDefault();
-    showSection("signup"); // Show Sign Up form
-    signInForm.style.display = "none"; // Hide Sign In form
-    signUpForm.style.display = "block"; // Show Sign Up form
-  });
-
-  const toggleToSignInLink = document.getElementById("toggle-to-signin");
-  toggleToSignInLink.addEventListener("click", function (e) {
-    e.preventDefault();
-    showSection("signin"); // Show Sign In form
-    signUpForm.style.display = "none"; // Hide Sign Up form
-    signInForm.style.display = "block"; // Show Sign In form
-  });
-
-  // Check login status when the page loads
-  checkUserLogin();
-
-  //log out User
-  const logoutButton = document.getElementById("logout-button");
-  logoutButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    logout();
-  });
-
-  function logout() {
-    localStorage.removeItem("loggedInUser");
-
-    // Clear currentUser variable
-    currentUser = null;
-
-    // Update navigation
-    updateNavigation();
-
-    showSection("index");
-  }
-
-  // ************************************************************************************************************************************************ //
-  // ******************************************** Market Section **************************************************************************** //
-  // ************************************************************************************************************************************************ //
-
-  // ###################  Fetch All Market Products Listed #############################
+  // ###################  Fetch All Products Listed #############################
   function fetchProducts() {
     fetch("http://localhost:3000/products")
       .then((response) => response.json())
@@ -265,28 +233,14 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((error) => console.error("Error fetching products:", error));
   }
 
-  // ############################# Display Market Product Listings ######################
+  // ############################# Display Product Listings ######################
   function displayMarketProducts(products) {
-    const productList = document.getElementById("market-list");
+    const productList = document.getElementById("product-list");
     productList.innerHTML = "";
 
     products.forEach((product) => {
       const productDiv = createProductElement(product);
       productList.appendChild(productDiv);
-    });
-
-    // Attach event listener to the parent container for dynamic buttons
-    productList.addEventListener("click", (event) => {
-      if (
-        event.target &&
-        event.target.tagName === "BUTTON" &&
-        event.target.id === "cart"
-      ) {
-        const productId = event.target.dataset.productId;
-        const maxQuantity = event.target.dataset.maxQuantity;
-
-        addToCart(productId, parseInt(maxQuantity, 10));
-      }
     });
   }
 
@@ -305,35 +259,16 @@ document.addEventListener("DOMContentLoaded", () => {
             <p><strong>Available Quantity:</strong> ${product.quantity}</p>
             <label for="quantity-${product.id}">Order Quantity:</label>
             <input type="number" id="quantity-${product.id}" min="1" max="${product.quantity}" value="1"/>
-            <button id="cart" data-product-id="${product.id}" data-max-quantity="${product.quantity}">Add to Cart</button>`;
+            <button onclick="addToCart('${product.id}', ${product.quantity})">Add to Cart</button>`;
 
     return productDiv;
   }
 
   // ##################### Filter Products by category  ##########################
-  const filterFruits = document.getElementById("Fruit");
-  const filterVegetables = document.getElementById("Vegetable");
-  const filterHoney = document.getElementById("Honey");
-
-  filterFruits.addEventListener("click", (e) => {
-    e.preventDefault();
-    filterByCategory("Fruit");
-  });
-
-  filterVegetables.addEventListener("click", (e) => {
-    e.preventDefault();
-    filterByCategory("Vegetable");
-  });
-
-  filterHoney.addEventListener("click", (e) => {
-    e.preventDefault();
-    filterByCategory("Honey");
-  });
-
   function filterByCategory(category) {
     fetch(`http://localhost:3000/products?category=${category}`)
       .then((response) => response.json())
-      .then((data) => displayMarketProducts(data))
+      .then((data) => displayProducts(data))
       .catch((error) => console.error("Error filtering products:", error));
   }
 
@@ -343,8 +278,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     console.log("Logged In User:", loggedInUser);
 
+    if (!loggedInUser) {
+      alert("You need to be logged in to add products to the cart.");
+      return;
+    }
+
     const quantityInput = document.getElementById(`quantity-${productId}`);
-    const quantity = parseInt(quantityInput.value, 10);
+    const quantity = parseInt(quantityInput.value);
     console.log("Selected Quantity:", quantity);
 
     if (quantity < 1 || quantity > maxQuantity) {
@@ -391,11 +331,8 @@ document.addEventListener("DOMContentLoaded", () => {
       );
   }
 
-  // ************************************************************************************************************************************************ //
-  // ********************************************** Buyer's Order Section ********************************************************************************** //
-  // ************************************************************************************************************************************************ //
-  //############################## Fetch Buyer's Orders ###########################
-  function fetchBuyerOrders() {
+  // ########################  Fetch Logged in Buyer's Orders #######################
+  function fetchUserOrders() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (!loggedInUser) {
       window.location.href = "../index.html";
@@ -408,13 +345,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (orders.length === 0) {
           displayNoOrdersMessage("You have not placed any orders yet.");
         } else {
-          displayBuyerOrders(orders);
+          displayOrders(orders);
         }
       })
       .catch((error) => console.error("Error fetching orders:", error));
   }
+
   // ########################### Display Buyer's Orders ##########################
-  function displayBuyerOrders(orders) {
+  function displayOrders(orders) {
     const ordersList = document.getElementById("orders-list");
     ordersList.innerHTML = "";
 
@@ -422,23 +360,24 @@ document.addEventListener("DOMContentLoaded", () => {
       const orderDiv = document.createElement("div");
       orderDiv.classList.add("order");
       orderDiv.innerHTML = `
-      <h4>Product: ${order.name}</h4>
-      <p>Unit Price: ${order.price}</p>
-      <p>Total Quantity: ${order.quantity}</p>
-      <p>Total Price: $${(order.price * order.quantity).toFixed(2)}</p>
-      <button class="cancel-button" data-id="${order.id}">Cancel Order</button>
-    `;
+        <h4>Product: ${order.name}</h4>
+        <p>Quantity: ${order.quantity}</p>
+        <p>Price: $${(order.price * order.quantity).toFixed(2)}</p>
+        <button class="cancel-button" data-id="${
+          order.id
+        }">Cancel Order</button>
+      `;
       ordersList.appendChild(orderDiv);
     });
 
     const cancelButtons = document.querySelectorAll(".cancel-button");
     cancelButtons.forEach((button) => {
-      button.addEventListener("click", handleBuyerCancelOrder);
+      button.addEventListener("click", handleCancelOrder);
     });
   }
 
   //######################## Cancel Buyer's Order #######################################
-  function handleBuyerCancelOrder(event) {
+  function handleCancelOrder(event) {
     const orderId = event.target.getAttribute("data-id");
 
     fetch(`http://localhost:3000/orders/${orderId}`, {
@@ -455,11 +394,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((error) => console.error("Error canceling order:", error));
   }
 
-  // ************************************************************************************************************************************************ //
-  // ************************************************** Farmer's Order Section *************************************************************************** //
-  // ************************************************************************************************************************************************ //
   // ###################### Farmer Fetch Customer Orders #########################3
-  function fetchFarmersOrders() {
+  function fetchCustomerOrders() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (!loggedInUser) {
       window.location.href = "../index.html";
@@ -500,7 +436,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     (acc, order) => {
                       if (!acc[order.userId]) {
                         acc[order.userId] = {
-                          name: order.name,
                           userId: order.userId,
                           email: userMap[order.userId] || "Unknown User",
                           totalQuantity: 0,
@@ -515,7 +450,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     {}
                   );
 
-                  displayFarmerOrders(Object.values(consolidatedOrders));
+                  displayOrders(Object.values(consolidatedOrders));
                 }
               })
 
@@ -534,7 +469,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ######################## Farmer Display Customers Orders #############################
-  function displayFarmerOrders(consolidatedOrders) {
+  function displayCustomerOrders(consolidatedOrders) {
     const ordersList = document.getElementById("orders-list");
     ordersList.innerHTML = "";
 
@@ -542,18 +477,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const orderDiv = document.createElement("div");
       orderDiv.classList.add("order");
       orderDiv.innerHTML = `
-      <h4>Order Item: ${order.name}</h4>
-      <h4>Ordered by: ${order.email}</h4>
-      <h4>Total Quantity: ${order.totalQuantity}</h4>
-      <p>Total Price: $${order.totalPrice.toFixed(2)}</p>
-      <button class="cancel-button" data-id="${order.id}">Cancel Order</button>
-    `;
+        <h4>Ordered by: ${order.email}</h4>
+        <p>Total Quantity: ${order.totalQuantity}</p>
+        <p>Total Price: $${order.totalPrice.toFixed(2)}</p>
+      `;
       ordersList.appendChild(orderDiv);
-    });
-
-    const cancelButtons = document.querySelectorAll(".cancel-button");
-    cancelButtons.forEach((button) => {
-      button.addEventListener("click", handleFarmerCancelOrder);
     });
   }
 
@@ -575,9 +503,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((error) => console.error("Error canceling order:", error));
   }
 
-  // ************************************************************************************************************************************************ //
-  // ************************************************* Farmer's Product Section ************************************************************************************ //
-  // ************************************************************************************************************************************************ //
   // ################ Farmer create product listing ########################333
   // Add new product to JSON server
   // Handle Add Product form submission
@@ -666,37 +591,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ordersList.innerHTML = `<p>${message}</p>`;
   }
 
-  // ************************************************************************************************************************************************ //
-  // *********************************************** About Section *************************************************************** //
-  // ************************************************************************************************************************************************ //
-  // #################### Display user Data ##########################
-  function displayUserData(user) {
-    const userInfoDiv = document.getElementById("user-info-about");
-    userInfoDiv.innerHTML = ""; // Clear any existing user info
-
-    // Create a list to display key-value pairs of user data
-    const userList = document.createElement("ul");
-
-    for (const key in user) {
-      if (user.hasOwnProperty(key)) {
-        const listItem = document.createElement("li");
-        listItem.textContent = `${key}: ${user[key]}`;
-        userList.appendChild(listItem);
-      }
-    }
-
-    // Append the user data list to the container
-    userInfoDiv.appendChild(userList);
-
-    // If the user is a grocer, display additional information
-    if (user.role === "grocer") {
-      const grocerInfo = document.createElement("p");
-      grocerInfo.textContent =
-        "You are a Grocer! You can manage products and orders.";
-      userInfoDiv.appendChild(grocerInfo);
-    }
-  }
-
   // ######################## Toggle Edit and display user Data ############################
   // Toggle between displaying details and editing details
   const editButton = document.getElementById("edit-button");
@@ -754,7 +648,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ######################## Display Edit Form ################################
   // Function to display editable form
   function displayEditableForm(user) {
-    const userInfoDiv = document.getElementById("user-info-about");
+    const userInfoDiv = document.getElementById("user-info");
     userInfoDiv.innerHTML = ""; // Clear any existing user info
 
     const form = document.createElement("form");
@@ -792,4 +686,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     userInfoDiv.appendChild(form);
   }
+
+  //########################## log out user ######################################
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "../../index.html";
+  }
+
+  //   End of the Line
 });
